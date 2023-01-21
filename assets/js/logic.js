@@ -4,6 +4,11 @@ var startQuizEl = document.querySelector("#start");
 var questionsEl = document.querySelector("#questions");
 var questionTitleEl = document.querySelector("#question-title");
 var choicesEl = document.querySelector("#choices");
+var choiceListEl = choicesEl.childNodes;
+
+
+// create varaible for the functions
+let questionNum = 0;
 
 // function to hide the start screen
 function hideStartScreen() {
@@ -12,9 +17,11 @@ function hideStartScreen() {
 
 function startQuiz() {
     hideStartScreen();
-    showQuestion(2);
+    // show current question
+    showQuestion(questionNum);
 }
 
+// function to show new questions. when answer was chosen, a new new question was shown.
 function showQuestion(i){
     questionsEl.setAttribute("class", "start");
     questionTitleEl.textContent = myQuestions[i].question;
@@ -24,7 +31,26 @@ function showQuestion(i){
         choiceBlock.textContent = key + ": " + value;
         choicesEl.appendChild(choiceBlock);
     }
+    for(let i = 0; i < choiceListEl.length; i++) {
+    choiceListEl[i].addEventListener("click", clickChoice)  
+    }
 }
 
+function clearQuestion() {
+    questionTitleEl.textContent = "";
+    choicesEl.textContent = "";
+}
+
+function clickChoice() {
+    if(questionNum < myQuestions.length) {
+        clearQuestion();
+        questionNum++;
+        showQuestion(questionNum);
+    } else {
+        return;
+    }
+}
 
 startQuizEl.addEventListener("click", startQuiz);
+
+
