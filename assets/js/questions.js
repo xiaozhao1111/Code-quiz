@@ -99,24 +99,24 @@ var myQuestions = [
         },
         correctAnswer: "b"
     },
-    {
-        question: "Which array method should you apply to run a function for every item within an array, returning an array of all items for which the function is true?",
-        answers: {
-            a: "every()",
-            b: "map()",
-            c: "forEach()",
-            d: "filter()"
-        },
-        correctAnswer: "d"
-    },
-    {
-        question: "You want to create striped table rows using CSS without adding a class to any element. Which CSS would correctly apply the background color to every odd row in your table?",
-        answers: {
-            a: "tr:nth-child(2) { background-color: #ccc; }",
-            b: "r:nth-child(2n+1) { background-color: #ccc; }",
-            c: "tr:nth-child(2+1) { background-color: #ccc; }",
-            d: "tr:nth-child(2n) { background-color: #ccc; }"
-        },
-        correctAnswer: "b"
-    }
+    // {
+    //     question: "Which array method should you apply to run a function for every item within an array, returning an array of all items for which the function is true?",
+    //     answers: {
+    //         a: "every()",
+    //         b: "map()",
+    //         c: "forEach()",
+    //         d: "filter()"
+    //     },
+    //     correctAnswer: "d"
+    // },
+    // {
+    //     question: "You want to create striped table rows using CSS without adding a class to any element. Which CSS would correctly apply the background color to every odd row in your table?",
+    //     answers: {
+    //         a: "tr:nth-child(2) { background-color: #ccc; }",
+    //         b: "r:nth-child(2n+1) { background-color: #ccc; }",
+    //         c: "tr:nth-child(2+1) { background-color: #ccc; }",
+    //         d: "tr:nth-child(2n) { background-color: #ccc; }"
+    //     },
+    //     correctAnswer: "b"
+    // }
 ]

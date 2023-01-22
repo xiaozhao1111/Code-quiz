@@ -1,4 +1,4 @@
-// create variable for the interactive elements
+// create DOM elements
 var startScreenEl = document.querySelector("#start-screen");
 var startQuizEl = document.querySelector("#start");
 var questionsEl = document.querySelector("#questions");
@@ -13,6 +13,9 @@ var wrongAudio = new Audio("./assets/sfx/incorrect.wav");
 var finalScoreEl = document.querySelector("#final-score");
 var initalsEl = document.querySelector("#initials");
 var timerEl = document.querySelector("#time");
+var submitBtnEl = document.querySelector("#submit");
+var feedbackEl = document.querySelector("#feedback");
+
 
 // create varaible for the functions
 let questionNum = 0;
@@ -23,11 +26,14 @@ let timerCount = 0;
 var timer;
 
 
+
+
 // function to hide the start screen
 function hideStartScreen() {
     startScreenEl.setAttribute("class", "hide");
 }
 
+// function to start the quiz
 function startQuiz() {
     // hide the start screen
     hideStartScreen();
@@ -58,7 +64,7 @@ function showEndScreen() {
     questionsEl.setAttribute("class", "hide");
     answerResultEl.setAttribute("class", "hide");
     endScreenEl.setAttribute("class", "show");
-    finalScoreEl.textContent = correctCounter + "/" + myQuestions.length;
+    finalScoreEl.textContent = correctCounter;
 }
 
 // function to clear the previous question and choices
@@ -147,7 +153,53 @@ function startTimer() {
 }
 
 
+// function to check the initals
+function checkInitials(input) {
+    let letters = /^[A-Z]+$/;
+    if(!input.value.match(letters)) {
+        alert("Sorry, only capital characters valid!");
+        return;
+    }
+}
+
+function saveScore(event) {
+    event.preventDefault();
+    checkInitials(initalsEl);
+
+    let newScore = {
+    initials: initalsEl.value,
+    score: correctCounter
+    };
+    console.log(newScore);
+
+    let highScoresArr = [];
+    let tempArr = JSON.parse(localStorage.getItem("highScores"));
+
+    if(localStorage.getItem("highScores") === null) {
+        highScoresArr.push(newScore);
+        localStorage.setItem("highScores", JSON.stringify(highScoresArr)) 
+    } else {
+        // compare the new score and saved score. If same user, save the higher score
+        tempArr.forEach(element => {
+            if(element.initials === newScore.initials) {
+                if(element.score <= newScore.score){
+                    element.score = newScore.score;
+                }
+            } else {
+                tempArr.push(newScore);
+            }
+        });
+        localStorage.setItem("highScores", JSON.stringify(tempArr));
+    }
+    endScreenEl.setAttribute("class", "hide")
+    feedbackEl.setAttribute("class", "feedback show");
+    
+
+}
+
 
 startQuizEl.addEventListener("click", startQuiz);
 
+
+submitBtnEl.addEventListener("click", saveScore);
 
