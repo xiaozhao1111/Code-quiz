@@ -12,12 +12,15 @@ var correctAudio = new Audio("./assets/sfx/correct.wav");
 var wrongAudio = new Audio("./assets/sfx/incorrect.wav");
 var finalScoreEl = document.querySelector("#final-score");
 var initalsEl = document.querySelector("#initials");
+var timerEl = document.querySelector("#time");
 
 // create varaible for the functions
 let questionNum = 0;
 let userChoice = "";
 let correctCounter = 0;
 let isCorrect = false;
+let timerCount = 0;
+var timer;
 
 
 // function to hide the start screen
@@ -26,9 +29,13 @@ function hideStartScreen() {
 }
 
 function startQuiz() {
+    // hide the start screen
     hideStartScreen();
+    // start the timer
+    startTimer();
     // show current question
     showQuestion(questionNum);
+    console.log("Current question is [" + questionNum + "]");
 }
 
 // function to show new questions. when answer was chosen, a new new question was shown.
@@ -70,6 +77,8 @@ function checkChoice() {
     } else {
         console.log("You choose the wrong answer!");
         isCorrect = false;
+        // if the answer is wrong, 10 seconds will be substracted from the timer
+        timerCount = timerCount - 10;
         wrongAudio.play();
     }
 }
@@ -78,9 +87,9 @@ function checkChoice() {
 function displayResult() {
     answerResultEl.setAttribute("class", "result")
     if(isCorrect) {
-        resultEl.textContent = "You choose the right answer!";
+        resultEl.textContent = "Correct answer!";
     } else {
-        resultEl.textContent = "You choose the wrong answer!";
+        resultEl.textContent = "Wrong answer!";
     }
 }
 
@@ -108,10 +117,36 @@ function clickChoice(event) {
         setTimeout(hideResult,1500);
         questionNum++;
         showQuestion(questionNum);
+        console.log("Current question is [" + questionNum + "]");
     } else {
+        questionNum++;
         showEndScreen();
+        console.log("Current question is No." + questionNum);
     }
 }
+
+// function to set the timer for the quiz
+function startTimer() {
+    // set 2 minutes for the whole quiz
+    timerCount = 60;
+    timer = setInterval(function() {
+        timerCount--;
+        timerEl.textContent = timerCount;
+        if(timerCount > 0 && questionNum === myQuestions.length) {
+            clearInterval(timer);
+            timerEl.textContent = 0;
+            showEndScreen();
+        }
+        if(timerCount <= 0) {
+            clearInterval(timer);
+            timerEl.textContent = 0;
+            showEndScreen();
+        }
+    }, 1000);
+
+}
+
+
 
 startQuizEl.addEventListener("click", startQuiz);
 
