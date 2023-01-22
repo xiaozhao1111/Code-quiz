@@ -5,14 +5,18 @@ var questionsEl = document.querySelector("#questions");
 var questionTitleEl = document.querySelector("#question-title");
 var choicesEl = document.querySelector("#choices");
 var choiceListEl = choicesEl.childNodes;
-var answerResultEl = document.querySelector("#answer-result")
-var resultEl = document.querySelector("#result")
+var answerResultEl = document.querySelector("#answer-result");
+var resultEl = document.querySelector("#result");
+var endScreenEl = document.querySelector("#end-screen");
+var correctAudio = new Audio("./assets/sfx/correct.wav");
+var wrongAudio = new Audio("./assets/sfx/incorrect.wav");
+var finalScoreEl = document.querySelector("#final-score");
+var initalsEl = document.querySelector("#initials");
 
 // create varaible for the functions
 let questionNum = 0;
 let userChoice = "";
 let correctCounter = 0;
-let wrongCounter = 0;
 let isCorrect = false;
 
 
@@ -43,7 +47,12 @@ function showQuestion(i){
 }
 
 // function to show end screen
-
+function showEndScreen() {
+    questionsEl.setAttribute("class", "hide");
+    answerResultEl.setAttribute("class", "hide");
+    endScreenEl.setAttribute("class", "show");
+    finalScoreEl.textContent = correctCounter + "/" + myQuestions.length;
+}
 
 // function to clear the previous question and choices
 function clearQuestion() {
@@ -57,14 +66,15 @@ function checkChoice() {
         console.log("You choose the right answer!");
         correctCounter++;
         isCorrect = true;
+        correctAudio.play();
     } else {
         console.log("You choose the wrong answer!");
-        wrongCounter++;
         isCorrect = false;
+        wrongAudio.play();
     }
 }
 
-// function to display result for current question
+// function to show if the previous question is correct
 function displayResult() {
     answerResultEl.setAttribute("class", "result")
     if(isCorrect) {
@@ -72,6 +82,11 @@ function displayResult() {
     } else {
         resultEl.textContent = "You choose the wrong answer!";
     }
+}
+
+// function to hide the result message of the previous question
+function hideResult() {
+    answerResultEl.setAttribute("class", "hide")
 }
 
 
@@ -87,13 +102,14 @@ function clickChoice(event) {
 
     checkChoice();
 
-    if(questionNum < myQuestions.length) {
+    if(questionNum < myQuestions.length-1) {
         clearQuestion();
         displayResult();
+        setTimeout(hideResult,1500);
         questionNum++;
         showQuestion(questionNum);
     } else {
-        
+        showEndScreen();
     }
 }
 
