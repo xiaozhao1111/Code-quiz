@@ -158,43 +158,60 @@ function checkInitials(input) {
     let letters = /^[A-Z]+$/;
     if(!input.value.match(letters)) {
         alert("Sorry, only capital characters valid!");
-        return;
+        return false;
+    } else {
+        return true;
     }
 }
 
 function saveScore(event) {
     event.preventDefault();
-    checkInitials(initalsEl);
+    let isCapital = checkInitials(initalsEl);
+    if(!isCapital) {
+        return;
+    } else {
+        let newScore = {
+        initials: initalsEl.value,
+        score: correctCounter
+        };
+        console.log(newScore);
 
-    let newScore = {
-    initials: initalsEl.value,
-    score: correctCounter
-    };
-    console.log(newScore);
+        let highScoresArr = [];
+        let tempArr = JSON.parse(localStorage.getItem("highScores"));
 
-    let highScoresArr = [];
-    let tempArr = JSON.parse(localStorage.getItem("highScores"));
-
-    if(localStorage.getItem("highScores") === null) {
+        if(localStorage.getItem("highScores") === null) {
         highScoresArr.push(newScore);
         localStorage.setItem("highScores", JSON.stringify(highScoresArr)) 
-    } else {
+        } else {
         // compare the new score and saved score. If same user, save the higher score
-        tempArr.forEach(element => {
-            if(element.initials === newScore.initials) {
-                if(element.score <= newScore.score){
-                    element.score = newScore.score;
-                }
-            } else {
-                tempArr.push(newScore);
+        
+        const duplicateIndex = tempArr.findIndex(element => element.initials === newScore.initials);
+        if(duplicateIndex === -1) {
+            tempArr.push(newScore);
+        } else {
+            if(tempArr[duplicateIndex].score < newScore.score) {
+                tempArr[duplicateIndex].score = newScore.score;
             }
-        });
+        }
+
+        //  tempArr.forEach(element => {
+        //     if(element.initials === newScore.initials) {
+        //         if(element.score <= newScore.score){
+        //             element.score = newScore.score;
+        //         } else {
+        //             element.score = element.score;
+        //         }
+        //     } else {
+        //         tempArr.push(newScore);
+        //     }
+        // });
         localStorage.setItem("highScores", JSON.stringify(tempArr));
     }
     endScreenEl.setAttribute("class", "hide")
     feedbackEl.setAttribute("class", "feedback show");
     
-
+    }
+    
 }
 
 
